@@ -260,6 +260,11 @@ def extract_answer(pred_str, use_last_number=True):
         else:
             a = ans.split('$')[0].strip()
         pred = a
+        # Handle \text{...} or text{...} patterns inside boxed content
+        # Extract content from \text{...} or text{...} if present
+        text_match = re.search(r'\\?text\{([^}]+)\}', pred)
+        if text_match:
+            pred = text_match.group(1)
     elif 'he answer is' in pred_str:
         pred = pred_str.split('he answer is')[-1].strip()
     elif 'final answer is' in pred_str:
